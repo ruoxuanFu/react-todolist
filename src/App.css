@@ -27,7 +27,12 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.input {
+  border: red solid .0625rem
 }
