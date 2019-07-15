@@ -27,9 +27,12 @@ class App extends Component {
           className='input'
           value={inputValue}
           onChange={this.handleInputChange}
+          ref={(input) => { this.input = input }}
         ></input>
         <button onClick={this.handleBtnClick}>确定</button>
-        <ul>{this.getListItem()}</ul>
+        <ul
+          ref={(ul) => { this.ul = ul }}
+        >{this.getListItem()}</ul>
       </Fragment>
     );
   }
@@ -49,8 +52,8 @@ class App extends Component {
     })
   }
 
-  handleInputChange(event) {
-    const value = event.target.value;
+  handleInputChange() {
+    const value = this.input.value;
 
     this.setState((state, props) => {
       return {
@@ -64,11 +67,11 @@ class App extends Component {
 
     if (inputValue !== "" && inputValue !== undefined & inputValue != null &&
       (inputValue.length > 0 && inputValue.trim().length !== 0)) {
-      this.setState((state, props) => {
-        return {
-          list: [...state.list, inputValue],
-          inputValue: '',
-        }
+      this.setState((state, props) => ({
+        list: [...state.list, inputValue],
+        inputValue: '',
+      }), () => {
+        console.log(this.ul.querySelectorAll('div'));
       });
     }
   }
