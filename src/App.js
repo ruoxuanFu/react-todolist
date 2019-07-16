@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import './App.css';
 import AppItem from './AppItem';
+import axios from 'axios';
 
 class App extends Component {
 
@@ -10,10 +11,18 @@ class App extends Component {
       inputValue: 'hello react',
       list: ['learn react', 'learn more react', 'learn js', 'learn more js'],
     }
+  }
 
-    this.handleInputChange = this.handleInputChange.bind(this)
-    this.handleBtnClick = this.handleBtnClick.bind(this);
-    this.handleDeleteItem = this.handleDeleteItem.bind(this);
+  componentDidMount() {
+    axios.get('https://www.easy-mock.com/mock/5d2d33d29a62296ff406ecf6/reacttest/api/v1/todolist')
+      .then((response) => {
+        this.setState((state, props) => ({
+          list: [...state.list, ...response.data]
+        }));
+      })
+      .catch(() => {
+        console.log('axios error');
+      })
   }
 
   render() {
@@ -37,32 +46,28 @@ class App extends Component {
     );
   }
 
-  getListItem() {
+  getListItem = () => {
     const { list } = this.state;
 
-    return list.map((value, index) => {
-      return (
-        <AppItem
-          key={index}
-          value={value}
-          index={index}
-          deleteItem={this.handleDeleteItem}
-        ></AppItem>
-      )
-    })
+    return list.map((value, index) => ((
+      <AppItem
+        key={index}
+        value={value}
+        index={index}
+        deleteItem={this.handleDeleteItem}
+      ></AppItem>
+    )))
   }
 
-  handleInputChange() {
+  handleInputChange = () => {
     const value = this.input.value;
 
-    this.setState((state, props) => {
-      return {
-        inputValue: value,
-      }
-    });
+    this.setState((state, props) => ({
+      inputValue: value,
+    }));
   }
 
-  handleBtnClick() {
+  handleBtnClick = () => {
     const { inputValue } = this.state;
 
     if (inputValue !== "" && inputValue !== undefined & inputValue != null &&
@@ -76,7 +81,7 @@ class App extends Component {
     }
   }
 
-  handleDeleteItem(index) {
+  handleDeleteItem = (index) => {
     this.setState((state, props) => {
       const list = [...state.list];
       list.splice(index, 1);

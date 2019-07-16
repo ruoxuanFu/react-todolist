@@ -3,10 +3,12 @@ import PropTypes from 'prop-types'
 
 class AppItem extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.handleClick = this.handleClick.bind(this);
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.value !== this.props.value) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     render() {
@@ -16,7 +18,7 @@ class AppItem extends Component {
         );
     }
 
-    handleClick() {
+    handleClick = () => {
         const { deleteItem, index } = this.props;
         deleteItem(index);
     }
